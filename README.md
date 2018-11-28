@@ -1,5 +1,4 @@
-# SDFS
-Siaranite Disk File System
+# Siaranite Disk File System (SDFS)
 
 Siaranite Disk File System (referred to SDFS from here on) is a filesystem implementation and specification written in C#, 
 primarily used in Cosmos operating systems.
