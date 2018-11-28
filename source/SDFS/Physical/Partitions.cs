@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDFS.Logical
+namespace SDFS.Physical
 {
-    public class Block
+    public class Partitions
     {
     }
 }

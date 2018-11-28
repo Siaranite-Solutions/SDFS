@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDFS.Physical
+namespace SDFS.Physical
 {
-    public class IDE
+    public class MBR
     {
     }
 }

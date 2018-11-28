@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MDFS.Logical
+namespace SDFS.Logical
 {
     public class Filesystem
     {

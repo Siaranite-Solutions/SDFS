@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDFS.Physical
+namespace SDFS.Logical.Entries
 {
-    public class Partitions
+    public class Directory : Entry
     {
     }
 }

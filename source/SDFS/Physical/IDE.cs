@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDFS.Logical.Entries
+namespace SDFS.Physical
 {
-    public class Directory : Entry
+    public class IDE
     {
     }
 }

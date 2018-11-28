@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDFS.Logical.Entries
+namespace SDFS
 {
-    public class File : Entry
+    public class UtilityMethods
     {
     }
 }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDFS
+namespace SDFS.Logical
 {
-    public class UtilityMethods
+    public class Block
     {
     }
 }

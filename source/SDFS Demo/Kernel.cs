@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Sys = Cosmos.System;
 
-namespace MDFS_Demo
+namespace SDFS_Demo
 {
     public class Kernel : Sys.Kernel
     {
