@@ -14,8 +14,4 @@
 		<PackageReference Include="Cosmos.HAL2" Version="*" NoWarn="NU1604" />
 		<PackageReference Include="Cosmos.Core" Version="*" NoWarn="NU1604" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Physical\" />
-  </ItemGroup>
 </Project>
