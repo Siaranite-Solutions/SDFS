@@ -1,7 +1,7 @@
-# MDFS
-Medli Disk File System
+# SDFS
+Siaranite Disk File System
 
-Medli Disk File System (referred to MDFS from here on) is a filesystem implementation and specification written in C#, 
+Siaranite Disk File System (referred to SDFS from here on) is a filesystem implementation and specification written in C#, 
 primarily used in Cosmos operating systems.
 
 The specification and other documentation can be found in the /docs/ folder, 
