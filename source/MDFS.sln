@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MDFS Demo", "MDFS Demo\MDFS Demo.csproj", "{12BDB11A-DDC1-4EBE-A4D4-CDE925AB599B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDFS-Impl", "MDFS-Impl\MDFS-Impl.csproj", "{7992A7ED-E612-4D4D-A6A7-4064ADEB90B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDFS", "MDFS\MDFS.csproj", "{7992A7ED-E612-4D4D-A6A7-4064ADEB90B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
