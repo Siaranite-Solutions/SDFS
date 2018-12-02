@@ -8,6 +8,9 @@ namespace SDFS.Logical
 {
     public class Block
     {
+        /// <summary>
+        /// Maxmimum size of content which a Block can contain
+        /// </summary>
         public static uint MaxBlockContentSize = 491;
 
         /// <summary>
