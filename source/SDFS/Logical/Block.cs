@@ -10,13 +10,34 @@ namespace SDFS.Logical
     {
         public static uint MaxBlockContentSize = 491;
 
+        /// <summary>
+        /// This block's filesystem partition (private)
+        /// </summary>
         private Partition _Partition;
 
+        /// <summary>
+        /// Block number (private)
+        /// </summary>
         private ulong _blockNo = 0;
 
+        /// <summary>
+        /// Boolean value - is this block in use?
+        /// </summary>
         private bool _Used = false;
+
+        /// <summary>
+        /// Content size of the block
+        /// </summary>
         private uint _cSize = 0;
+
+        /// <summary>
+        /// Total size of the block (private)
+        /// </summary>
         private ulong _tSize = 0;
+        
+        /// <summary>
+        /// Next available block allocation
+        /// </summary>
         private ulong _nBlock = 0;
 
         /// <summary>
@@ -57,7 +78,7 @@ namespace SDFS.Logical
         }
 
         /// <summary>
-        /// The current content Size
+        /// The current content size
         /// </summary>
         public uint ContentSize
         {
@@ -72,7 +93,7 @@ namespace SDFS.Logical
         }
 
         /// <summary>
-        /// Total size of the Entry (Not Used)
+        /// Total size of the Entry
         /// </summary>
         public ulong TotalSize
         {
