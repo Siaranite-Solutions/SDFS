@@ -90,6 +90,17 @@ namespace SDFS.Logical.Entries
         private static int MaxFNL = 255;
 
         /// <summary>
+        /// Retrieves the start block
+        /// </summary>
+        public Block StartBlock
+        {
+            get
+            {
+                return sBlock;
+            }
+        }
+
+        /// <summary>
         /// Path of the FS entry
         /// </summary>
         public String Path

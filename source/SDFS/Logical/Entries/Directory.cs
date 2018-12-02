@@ -139,6 +139,155 @@ namespace SDFS.Logical.Entries
             return entries.ToArray();
         }
 
+
+        /// <summary>
+        /// Creates a new File to the current directory
+        /// </summary>
+        /// <param name="Name">The new File's name</param>
+        public void AddFile(String Name)
+        {
+            Entry[] dirs = RetrieveEntries();
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (dirs[i].Name == Name)
+                {
+                    // Entry with same Name already exists!
+                    return;
+                }
+            }
+            Block curb = EditBlock();
+            Block newfileb = CreateEntry(_partition, Name);
+            //if (newfileb != null)
+            //{
+            BitConverter.GetBytes(newfileb.BlockNumber).CopyTo(curb.Content, curb.ContentSize);
+            BitConverter.GetBytes((uint)2).CopyTo(curb.Content, curb.ContentSize + 8);
+            curb.ContentSize += 12;
+            Block.Write(_partition, curb);
+            EditAttributes(EntryAttribute.DtM, UtilityMethods.UNIXTimeStamp);
+            EditAttributes(EntryAttribute.DtA, UtilityMethods.UNIXTimeStamp);
+            //}
+        }
+
+        /// <summary>
+        /// Permits to remove a Directory by passing it's name
+        /// </summary>
+        /// <param name="Name">The Directory's name to remove</param>
+        public void RemoveDirectory(String Name)
+        {
+            Directory[] dirs = RetrieveDirectories();
+            bool found = false;
+            int index = 0;
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (dirs[i].Name == Name)
+                {
+                    index = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+            {
+                RemoveDirectory(dirs[index]);
+            }
+        }
+
+        /// <summary>
+        /// Permits to remove a Directory by passing it
+        /// </summary>
+        /// <param name="Directory">The Directory to remove</param>
+        private void RemoveDirectory(Directory Directory)
+        {
+            Directory[] subdirs = Directory.RetrieveDirectories();
+            for (int i = 0; i < subdirs.Length; i++)
+            {
+                Directory.RemoveDirectory(subdirs[i]);
+            }
+            File[] subfiles = Directory.RetrieveFiles();
+            for (int i = 0; i < subdirs.Length; i++)
+            {
+                Directory.RemoveFile(subfiles[i].Name);
+            }
+            Filesystem.Clean(Directory.sBlock);
+            DeleteBlock(Directory.sBlock);
+        }
+
+        /// <summary>
+        /// Permits to remove a File by passing it's name
+        /// </summary>
+        /// <param name="Name">The File's name to remove</param>
+        public void RemoveFile(String Name)
+        {
+            File[] files = RetrieveFiles();
+            bool found = false;
+            int index = 0;
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name == Name)
+                {
+                    index = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+            {
+                Filesystem.Clean(files[index].StartBlock);
+                DeleteBlock(files[index].StartBlock);
+            }
+        }
+
+        /// <summary>
+        /// Permits to remove a Block by passing it
+        /// </summary>
+        /// <param name="Directory">The Block to remove</param>
+        private void DeleteBlock(Block FSBlock)
+        {
+            Block curb = sBlock;
+            while (curb.NextBlock != 0)
+            {
+                int index = 0;
+                bool found = false;
+                List<Byte> cont = new List<Byte>();
+                curb = Block.Read(sBlock.mPartition, sBlock.NextBlock);
+                while (index < curb.ContentSize)
+                {
+                    ulong a = BitConverter.ToUInt64(curb.Content, index);
+                    Byte[] app = BitConverter.GetBytes(a);
+                    for (int i = 0; i < app.Length; i++)
+                    {
+                        cont.Add(app[i]);
+                    }
+                    index += 8;
+                    uint sep = BitConverter.ToUInt32(curb.Content, index);
+                    index += 4;
+                    if (a == FSBlock.BlockNumber)
+                    {
+                        app = BitConverter.GetBytes((uint)0);
+                        for (int i = 0; i < app.Length; i++)
+                        {
+                            cont.Add(app[i]);
+                        }
+                        found = true;
+                    }
+                    else
+                    {
+                        app = BitConverter.GetBytes(sep);
+                        for (int i = 0; i < app.Length; i++)
+                        {
+                            cont.Add(app[i]);
+                        }
+                    }
+                }
+                if (found)
+                {
+                    curb.Content = cont.ToArray();
+                    curb.ContentSize = (uint)cont.Count;
+                    Block.Write(_partition, curb);
+                }
+            }
+        }
+
         public void AddDirectory(String Name)
         {
             Entry[] directories = RetrieveEntries();
@@ -162,7 +311,7 @@ namespace SDFS.Logical.Entries
 
 
         /// <summary>
-        /// Gets the last NoobFSBlock of the directory
+        /// Gets the last Block of the directory
         /// </summary>
         private Block EditBlock()
         {

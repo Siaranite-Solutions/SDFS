@@ -77,6 +77,15 @@ namespace SDFS.Logical
         public Filesystem(Partition aPartition)
         {
             _Partition = aPartition;
+            if (!IsValidFS())
+            {
+                // If unable to detect a valid partition
+                if (!GenerateFS())
+                {
+                    // Error - unable to create a new filesystem on specified partition
+                    throw new Exception("Unable to create a new filesystem on the specified partition");
+                }
+            }
         }
 
         /// <summary>

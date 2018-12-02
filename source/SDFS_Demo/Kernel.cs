@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Sys = Cosmos.System;
+using SDFS;
+using SDFS.Logical;
 
 namespace SDFS_Demo
 {
