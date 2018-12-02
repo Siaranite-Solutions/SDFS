@@ -28,7 +28,7 @@ namespace SDFS.Physical
         }
 
         /// <summary>
-        /// Retrieves this IDE device's size in Megabytes
+        /// Retrieves this IDE device's size in megabytes
         /// </summary>
         public UInt32 Size
         {
