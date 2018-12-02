@@ -221,7 +221,7 @@ namespace SDFS
         /// <summary>
         /// Retrieves the number of days in each month
         /// </summary>
-        private int[] MonthToDays
+        private static int[] MonthToDays
         {
             get
             {

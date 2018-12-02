@@ -1,11 +1,70 @@
 ﻿using System;
 using SDFS.Physical;
 using Cosmos.HAL.BlockDevice;
+using SDFS.Logical.Entries;
 
 namespace SDFS.Logical
 {
     public class Filesystem
     {
+        public Directory Root
+        {
+            get
+            {
+                return new Directory(_Partition, 1, Separator);
+            }
+        }
+
+        /// <summary>
+        /// Concatenates a file and it's path location, resulting in full path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="fname"></param>
+        /// <returns>Full path location of file</returns>
+        public static string ConcatFile(string path, string fname)
+        {
+            String file = "";
+            file = path.TrimEnd(Separator.ToCharArray());
+            if (file == null)
+            {
+                file = "";
+            }
+            if (fname != Separator)
+            {
+                file += file += Separator + fname;
+            }
+            else
+            {
+                file = Separator;
+            }
+            return file;
+        }
+
+        /// <summary>
+        /// Concatenates a directory and it's path location, resulting in full path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="dir"></param>
+        /// <returns>Full path location of directory</returns>
+        public static string ConcatDirectory(string path, string dir)
+        {
+            String directory = "";
+            directory = path.TrimEnd(Separator.ToCharArray());
+            if (directory == null)
+            {
+                directory = "";
+            }
+            if (dir != Separator)
+            {
+                directory += Separator + dir + Separator;
+            }
+            else
+            {
+                directory = Separator;
+            }
+            return directory;
+        }
+
         /// <summary>
         /// The filesystem that is currently in use
         /// </summary>
