@@ -7,7 +7,7 @@ namespace SDFS.Physical
 {
     public class IDE
     {
-        /// <summary>
+                /// <summary>
 		/// List of ATA IDE Devices
 		/// </summary>
 		public static List<IDE> Devices
@@ -104,6 +104,37 @@ namespace SDFS.Physical
 		public void WriteBlock(ulong aBlockNo, uint aBlockCount, byte[] aData)
         {
             blockDevice.WriteBlock(aBlockNo, aBlockCount, aData);
+        }
+
+
+        public PrimaryPartition[] PrimaryPartitions
+        {
+            get
+            {
+                List<PrimaryPartition> l = new List<PrimaryPartition>();
+                for (int i = 0; i < mMBR.Partitions.Length; i++)
+                {
+                    if (mMBR.Partitions[i].SystemID != 0)
+                    {
+                        l.Add(new PrimaryPartition(blockDevice, mMBR.Partitions[i].StartSector, mMBR.Partitions[i].SectorCount, mMBR.Partitions[i]));
+                    }
+                }
+                return l.ToArray();
+            }
+        }
+
+        /// <summary>
+		/// Retrieves the master boot record of this class instance's BlockDevice
+		/// </summary>
+		public MBR mMBR
+        {
+            get
+            {
+                Byte[] data = blockDevice.NewBlockArray(1);
+                this.blockDevice.ReadBlock(0, 1, data);
+                MBR m = new MBR(data, blockDevice);
+                return m;
+            }
         }
     }
 }

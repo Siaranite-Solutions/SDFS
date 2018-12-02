@@ -8,6 +8,17 @@ namespace SDFS.Physical
     public class MBR
     {
         /// <summary>
+        /// An array containing all patitions
+        /// </summary>
+        public PartitionObj[] Partitions
+        {
+            get
+            {
+                return mPartitions.ToArray();
+            }
+        }
+
+        /// <summary>
         /// List of partitions found on the Master Boot Record
         /// </summary>
         private List<PartitionObj> mPartitions = new List<PartitionObj>();
@@ -24,7 +35,8 @@ namespace SDFS.Physical
         /// <param name="aBlockDevice"></param>
         public MBR (Byte[] aMBR, BlockDevice aBlockDevice)
         {
-            this.mBlockDevice = aBlockDevice;
+            mBlockDevice = aBlockDevice;
+            UtilityMethods.CopyByteToByte(aMBR, 0, BootArray, 0, 440);
             Signature = BitConverter.ToUInt32(aMBR, 440);
             // Partition entries are located at MBR offsets 446, 462, 478 and 494
             // MBR only consists of 512 bytes
@@ -37,7 +49,7 @@ namespace SDFS.Physical
         /// <summary>
 		/// The Byte Array containing the bootable code and partition information of the MBR
 		/// </summary>
-		public readonly Byte[] Bootable = new Byte[440];
+		public readonly Byte[] BootArray = new Byte[440];
 
         /// <summary>
 		/// The Disk signature
