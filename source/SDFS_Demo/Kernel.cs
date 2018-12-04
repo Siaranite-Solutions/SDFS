@@ -10,6 +10,7 @@ namespace SDFS_Demo
 {
     public class Kernel : Sys.Kernel
     {
+        public static Filesystem fs;
         /// <summary>
         /// Partition containing a valid SDFS partition
         /// </summary>
@@ -18,6 +19,11 @@ namespace SDFS_Demo
         protected override void BeforeRun()
         {
             IDE[] IDEs = IDE.Devices.ToArray();
+            for (int i = 0; i < IDEs.Length; i++)
+            {
+                new DiskListing(i, IDEs[i]);
+            }
+
             Console.WriteLine("Number of IDE disks: " + IDEs.Length);
             Console.WriteLine("Looking for valid partitions...");
             for (int i = 0; i < IDEs.Length; i++)
@@ -34,18 +40,17 @@ namespace SDFS_Demo
             //#warning Revert to == null!!!
             if (workPartition == null)
             {
-                DiskHandler.CreatePartitions(IDEs);
+                SDFSUtility.Main(IDEs);
                 Console.WriteLine("The machine needs to be restarted.");
                 Console.ReadKey(true);
                 Sys.Power.Reboot();
             }
 
             Console.Write("Checking FileSystem... ");
-            Filesystem fs;
+            
             try
             {
                 fs = new Filesystem(workPartition);
-                Filesystem.MapFilesystem(fs);
             }
             catch (Exception ex)
             {

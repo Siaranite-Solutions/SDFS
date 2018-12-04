@@ -49,7 +49,7 @@ namespace SDFS.Physical
         /// <param name="Device"></param>
         public IDE(AtaPio Device)
         {
-
+            this.blockDevice = Device;
         }
 
         /// <summary>
@@ -112,11 +112,11 @@ namespace SDFS.Physical
             get
             {
                 List<PrimaryPartition> l = new List<PrimaryPartition>();
-                for (int i = 0; i < mMBR.Partitions.Length; i++)
+                for (int i = 0; i < MBR.Partitions.Length; i++)
                 {
-                    if (mMBR.Partitions[i].SystemID != 0)
+                    if (MBR.Partitions[i].SystemID != 0)
                     {
-                        l.Add(new PrimaryPartition(blockDevice, mMBR.Partitions[i].StartSector, mMBR.Partitions[i].SectorCount, mMBR.Partitions[i]));
+                        l.Add(new PrimaryPartition(blockDevice, MBR.Partitions[i].StartSector, MBR.Partitions[i].SectorCount, MBR.Partitions[i]));
                     }
                 }
                 return l.ToArray();
@@ -126,7 +126,7 @@ namespace SDFS.Physical
         /// <summary>
 		/// Retrieves the master boot record of this class instance's BlockDevice
 		/// </summary>
-		public MBR mMBR
+		public MBR MBR
         {
             get
             {
