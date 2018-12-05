@@ -77,8 +77,10 @@ namespace SDFS.Logical
         public Filesystem(Partition aPartition)
         {
             _Partition = aPartition;
+            Console.WriteLine("Checking for valid filesystem...");
             if (!IsValidFS())
             {
+                Console.WriteLine("Generating filesystem...");
                 // If unable to detect a valid partition
                 if (!GenerateFS())
                 {
@@ -98,7 +100,7 @@ namespace SDFS.Logical
         /// </summary>
         private Partition _Partition;
 
-        private byte[] fsSignature = new byte[]
+        private static byte[] fsSignature = new byte[]
         {
             0x4D,
             0x65,
@@ -158,14 +160,29 @@ namespace SDFS.Logical
         /// </summary>
         /// <param name="part"></param>
         /// <returns></returns>
-        private bool GenerateFS(Partition part)
+        private static bool GenerateFS(Partition part)
         {
-            Refresh(10000);
+            Console.WriteLine("Cleaning filesystem blocks...");
+            Refresh(part, 10000);
             Byte[] data = part.NewBlockArray(1);
             fsSignature.CopyTo(data, 0);
-            for (int i = fsSignature.Length; i < fsSignature.Length; i++)
+            Console.WriteLine("Writing filesystem signature\n");
+            for (int i = 0; i < fsSignature.Length; i++)
             {
                 data[i] = fsSignature[i];
+            }
+            string MedliDFS = System.Text.Encoding.ASCII.GetString(fsSignature);
+            for (int i = 0; i < MedliDFS.Length; i++)
+            {
+                if (i != MedliDFS.Length)
+                {
+                    Console.Write(MedliDFS.ToCharArray()[i] + ":");
+                }
+                else
+                {
+                    Console.Write(MedliDFS.ToCharArray()[i]);
+                }
+                
             }
             part.WriteBlock(0, 1, data);
             return true;
@@ -178,12 +195,27 @@ namespace SDFS.Logical
         /// <returns></returns>
         private bool GenerateFS()
         {
-            Refresh(10000);
+            Console.WriteLine("Cleaning filesystem blocks...");
+            //Refresh(_Partition, 10000);
             Byte[] data = _Partition.NewBlockArray(1);
-            fsSignature.CopyTo(data, 0);
-            for (int i = fsSignature.Length; i < fsSignature.Length; i++)
+            //fsSignature.CopyTo(data, 0);
+            Console.WriteLine("Writing filesystem signature\n");
+            for (int i = 0; i < fsSignature.Length; i++)
             {
                 data[i] = fsSignature[i];
+            }
+            string MedliDFS = System.Text.Encoding.ASCII.GetString(fsSignature);
+            for (int i = 0; i < MedliDFS.Length; i++)
+            {
+                if (i != MedliDFS.Length)
+                {
+                    Console.Write(MedliDFS.ToCharArray()[i] + ":");
+                }
+                else
+                {
+                    Console.Write(MedliDFS.ToCharArray()[i]);
+                }
+
             }
             _Partition.WriteBlock(0, 1, data);
             return true;
@@ -230,6 +262,42 @@ namespace SDFS.Logical
             for (ulong i = 0; i < lBlock; i++)
             {
                 mPartition.WriteBlock(i, 1, data);
+                if (i % rate == 0)
+                {
+                    perc++;
+                }
+                if (i % 32 == 0)
+                {
+                    // perc + "% refreshed. " + ((uint)(lBlock - i)) + " blocks remaining.
+                }
+            }
+            // Successfully refreshed filesystem.
+        }
+
+        /// <summary>
+        /// Cleans a filesystem by a specified amount of blocks
+        /// (default is BlockCount)
+        /// </summary>
+        /// <param name="sBlock"></param>
+        public static void Refresh(Partition aPartition, ulong sBlock = 0)
+        {
+            Byte[] data = aPartition.NewBlockArray(1);
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = 0;
+            }
+            // Proceeding to refresh the filesystem...
+            ulong lBlock = aPartition.BlockCount;
+            if (sBlock != 0)
+            {
+                lBlock = sBlock;
+            }
+            ulong rate = lBlock / 100;
+            uint perc = 0;
+            // perc + "% refreshed. " + (uint)lBlock + " blocks remaining.
+            for (ulong i = 0; i < lBlock; i++)
+            {
+                aPartition.WriteBlock(i, 1, data);
                 if (i % rate == 0)
                 {
                     perc++;

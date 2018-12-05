@@ -56,12 +56,29 @@ namespace SDFS_Demo
             {
                 Console.WriteLine("Error!" + ex.Message);
             }
+
+            Console.WriteLine("\n Size:" + workPartition.Info.TotalSize + "MBs");
+            Console.WriteLine("Type: " + workPartition.Info.SystemID.ToString());
+
+            Console.ReadKey(true);
+            try
+            {
+                fs.Root.AddDirectory("Test");
+                SDFS.IO.File.WriteAllText("test.txt", "Test", "Welcome to SDFS Filesystem");
+                string ExampleString = SDFS.IO.File.ReadAllText("test.txt", "Test");
+
+                Console.WriteLine(ExampleString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadKey(true);
+            }
+            
         }
 
         protected override void Run()
         {
-            Console.WriteLine(workPartition.Info.TotalSize + "MBs");
-            Console.WriteLine("Type: " + workPartition.Info.SystemID.ToString());
             Console.ReadKey(true);
         }
     }
