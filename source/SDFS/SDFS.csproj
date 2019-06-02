@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <RootNamespace>MDFS</RootNamespace>
+    <RootNamespace>SDFS</RootNamespace>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
-    <AssemblyName>MDFS</AssemblyName>
+    <AssemblyName>SDFS</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
